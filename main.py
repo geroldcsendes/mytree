@@ -3,7 +3,7 @@ import sys
 import argparse
 
 
-def get_relative_depth(dir_path, level_offset):
+def get_relative_depth(dir_path: str, level_offset: int) -> int:
     return dir_path.count(os.path.sep) - level_offset
 
 
@@ -11,17 +11,18 @@ def exclude_dir_and_subdirs(dir):
     pass
 
 
-def tree_maker(input_path, exclude_ext="", write_md=False):
+def tree_maker(
+        input_path: str, exclude_ext: str = "", write_md: bool = False) -> str:
     """
     docstring
     """
 
     INDENTCHAR = "    "
     INDENT_SYMBOL = "├── "
-    BACKTICKS = "```" # used when output written into .md
+    BACKTICKS = "```"  # used when output written into .md
 
     # FIXME there should be a builtin method to do this
-    level_offset = str(input_path).count(os.path.sep) - 0
+    level_offset = input_path.count(os.path.sep) - 0
 
     # initialize list to contain tree as str
     res_list = []
@@ -108,13 +109,3 @@ if __name__ == '__main__':
 # example call: python main.py --path C:\Users\gerol\Desktop\python\mytree\testdir\test1
 # ex call with excluding extensions
 # python main.py --path C:\Users\gerol\Desktop\python\mytree\testdir\test1 --exclude_ext ".csv" ".txt" "__init__.py"
-
-
-# path to folder
-# ├── data
-#     ├── my.csv
-# ├── src
-#     ├── lib
-#         ├── helpers.py
-#     ├── module.py
-# ├── README.md

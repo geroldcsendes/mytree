@@ -18,7 +18,7 @@ class TestTree(unittest.TestCase):
         path_test = pathlib.Path(path_test).resolve()
 
         # create result tree
-        result = tree_maker(input_path=path_test, write_md=True)
+        result = tree_maker(input_path=str(path_test), write_md=True)
 
         # expected tree
         path_expected = "testdir/test1_exp.md"

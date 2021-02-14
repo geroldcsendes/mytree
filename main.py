@@ -13,7 +13,7 @@ def tree_maker(
     INDENT_SYM_LAST_LEVEL = "└──"
     BACKTICKS = "```"  # used when output written into .md
 
-    input_path = pathlib.Path("testdir").resolve()
+    input_path = pathlib.Path(input_path).resolve()
 
     # initialize list to contain tree as str
     res_list = []
@@ -54,16 +54,11 @@ def tree_maker(
         return tree_str
 
     else:
-        print("write")
         # build result string
         res_list.insert(0, BACKTICKS)
         res_list.append(BACKTICKS)
         tree_str = " \n".join(res_list)
 
-        # create result string
-        print("Printing result tree...")
-
-        print(tree_str)
         with open("mytree.md", "w+", encoding='utf-8') as writer:
             writer.write(tree_str)
 

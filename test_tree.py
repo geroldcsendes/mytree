@@ -28,8 +28,8 @@ class TestTree(unittest.TestCase):
         test_res_path = "testdir/test1_res.md"
         test_res_path = pathlib.Path(test_res_path).resolve()
 
-        with open(test_res_path, "w+", encoding='utf-8') as writer:
-            writer.write(result)
+        # with open(test_res_path, "w+", encoding='utf-8') as writer:
+        #     writer.write(result)
 
         self.assertEqual(result, expected)
 

@@ -1,14 +1,5 @@
-import os
-import sys
+import pathlib
 import argparse
-
-
-def get_relative_depth(dir_path: str, level_offset: int) -> int:
-    return dir_path.count(os.path.sep) - level_offset
-
-
-def exclude_dir_and_subdirs(dir):
-    pass
 
 
 def tree_maker(
@@ -18,48 +9,48 @@ def tree_maker(
     """
 
     INDENTCHAR = "    "
-    INDENT_SYMBOL = "├── "
+    INDENT_SYM = "├── "
+    INDENT_SYM_LAST_LEVEL = "└──"
     BACKTICKS = "```"  # used when output written into .md
 
-    # FIXME there should be a builtin method to do this
-    level_offset = input_path.count(os.path.sep) - 0
+    input_path = pathlib.Path("testdir").resolve()
 
     # initialize list to contain tree as str
     res_list = []
 
-    for root, subdirs, files in os.walk(input_path):
+    for path in sorted(input_path.rglob('*')):
 
-        level = get_relative_depth(root, level_offset)
+        # check depth of path
+        depth = len(path.relative_to(input_path).parts)
 
-        if level == 0:
-            root_str = INDENTCHAR * level + root
-            print(root_str)
-            res_list.append(root_str)
-            pass
-        else:
-            root_str = (INDENTCHAR * level + INDENT_SYMBOL +
-                        os.path.basename(root) + "/")
+        # get list of children
+        path_children = [path_child for path_child in path.glob('*')]
 
-            print(root_str) 
-            res_list.append(root_str)
-        level += 1
+        # check whether to exclude
+        include_file = True
+        if path.is_file():
+            path_suffix = path.suffix
 
-        for filename in files:
+            if path_suffix == exclude_ext:
+                include_file = False
 
-            file_str = INDENTCHAR * level + INDENT_SYMBOL + filename
-            # check whether to exclude
-            if filename.endswith(tuple(exclude_ext)):
-                pass
-            else:
-                print(file_str)
-                res_list.append(file_str)
+        if len(path_children) > 0 and include_file:
+
+            spacer = INDENTCHAR * depth
+            print(f'{spacer}{INDENT_SYM} {path.name}')
+
+        elif include_file:
+            spacer = INDENTCHAR * depth
+            print(f'{spacer}{INDENT_SYM_LAST_LEVEL} {path.name}')
 
     if not write_md:
+        print("not write")
         # build result string
         tree_str = " \n".join(res_list)
         return tree_str
 
     else:
+        print("write")
         # build result string
         res_list.insert(0, BACKTICKS)
         res_list.append(BACKTICKS)
@@ -75,12 +66,13 @@ def tree_maker(
         return tree_str
 
 
-if __name__ == '__main__':
+def main():
 
     # Parse arguments
     parser = argparse.ArgumentParser(description="Get directory tree")
     parser.add_argument("--path", type=str, default="",
-                        help="the path to directory of which tree you want to have",
+                        help="the path to directory of which tree you want"
+                        "to have",
                         required=True)
     parser.add_argument("--exclude_ext", type=str, nargs="*", default=[],
                         help="Files with extensions you don't want to include",
@@ -95,17 +87,14 @@ if __name__ == '__main__':
     write_md = args.write_md
 
     if input_path == "":
-        input_path = os.getcwd()
-
-    if not os.path.isdir(input_path):
-        print('The path specified does not exist')
-        sys.exit()
+        input_path = pathlib.path().cwd()
 
     tree_maker(
         input_path=input_path,
         exclude_ext=exclude_ext,
-        write_md=write_md)    
+        write_md=write_md)
 
-# example call: python main.py --path C:\Users\gerol\Desktop\python\mytree\testdir\test1
-# ex call with excluding extensions
-# python main.py --path C:\Users\gerol\Desktop\python\mytree\testdir\test1 --exclude_ext ".csv" ".txt" "__init__.py"
+
+if __name__ == '__main__':
+
+    main()

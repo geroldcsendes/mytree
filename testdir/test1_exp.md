@@ -1,13 +1,14 @@
 ``` 
-C:\Users\gerol\Desktop\python\mytree\testdir\test1 
-    ├── README.md 
-    ├── data/ 
-        ├── my.csv 
-        ├── munged/ 
-            ├── interim.csv 
-    ├── src/ 
-        ├── module.py 
-        ├── __init__.py 
-        ├── lib/ 
-            ├── helpers.py 
+├──  test1 
+    ├──  data 
+        ├──  munged 
+            └── interim.csv 
+        └── my.csv 
+    └── README.md 
+    ├──  src 
+        └── __init__.py 
+        ├──  lib 
+            └── helpers.py 
+        └── module.py 
+└── test1_exp.md 
 ```

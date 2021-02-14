@@ -8,7 +8,7 @@ def tree_maker(
     docstring
     """
 
-    INDENTCHAR = "    "
+    INDENTCHAR = "    "  # 4 spaces
     INDENT_SYM = "├── "
     INDENT_SYM_LAST_LEVEL = "└──"
     BACKTICKS = "```"  # used when output written into .md
@@ -36,12 +36,16 @@ def tree_maker(
 
         if len(path_children) > 0 and include_file:
 
-            spacer = INDENTCHAR * depth
-            print(f'{spacer}{INDENT_SYM} {path.name}')
+            spacer = INDENTCHAR * (depth - 1)
+            path_str = f'{spacer}{INDENT_SYM} {path.name}'
+            res_list.append(path_str)
+            print(path_str)
 
         elif include_file:
-            spacer = INDENTCHAR * depth
-            print(f'{spacer}{INDENT_SYM_LAST_LEVEL} {path.name}')
+            spacer = INDENTCHAR * (depth - 1)
+            path_str = f'{spacer}{INDENT_SYM_LAST_LEVEL} {path.name}'
+            res_list.append(path_str)
+            print(path_str)
 
     if not write_md:
         print("not write")
